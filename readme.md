@@ -1,4 +1,3 @@
 **To run:**
-`python3 -m venv venv`
-`source venv/bin/activate`
-`pip install -r requirements.txt`
+- `docker-compose up --build`
+- visit `127.0.0.1:5000`

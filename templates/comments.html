@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave a Comment</title>
+    <title>Back to the Future - Leave a Comment</title>
 </head>
 <body>
-    <h1>Leave a Comment</h1>
+    <h1>Leave a Comment for the Future</h1>
+    <p>"If my calculations are correct, when this baby hits 88 miles per hour... you're gonna see some serious feedback!" - Doc Brown</p>
+
     <form method="POST">
         <label for="comment">Your Comment:</label>
-        <input type="text" id="comment" name="comment">
+        <input type="text" id="comment" name="comment" placeholder="Write something!">
         <button type="submit">Submit</button>
     </form>
-    
+
     {% if user_comment %}
-        <h2>Your Comment:</h2>
+        <h2>Your Comment has been received in the future:</h2>
         <p>{{ user_comment }}</p>  <!-- Vulnerable to XSS -->
     {% endif %}
 </body>

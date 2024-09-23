@@ -1,17 +1,17 @@
 CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL
 );
 
-INSERT INTO users (id, name) VALUES (1, 'Alice');
-INSERT INTO users (id, name) VALUES (2, 'Bob');
-INSERT INTO users (id, name) VALUES (3, 'Charlie');
+INSERT INTO users (name, email) VALUES ('Marty McFly', 'marty@mcfly.com');
+INSERT INTO users (name, email) VALUES ('Doc Brown', 'doc@brown.com');
+INSERT INTO users (name, email) VALUES ('Biff Tannen', 'biff@tannen.com');
 
-CREATE TABLE comments (
-    id INTEGER PRIMARY KEY,
-    comment TEXT NOT NULL
+CREATE TABLE secrets (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    flag VARCHAR(255) NOT NULL
 );
 
-INSERT INTO comments (id, comment) VALUES (1, 'This is a great site!');
-INSERT INTO comments (id, comment) VALUES (2, 'Nice work!');
+INSERT INTO secrets (flag) VALUES ('FLAG{GreatScott_1.21_Gigawatts}');
 
