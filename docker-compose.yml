@@ -10,21 +10,4 @@ services:
       - .:/app
     environment:
       - FLASK_ENV=development
-      - MYSQL_HOST=db
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD="my-secret-pw"
-      - MYSQL_DATABASE="hack_to_the_future"
-    depends_on:
-      - db
-
-  db:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: "my-secret-pw"
-      MYSQL_DATABASE: "hack_to_the_future"
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysql_data:/var/lib/mysql
-      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - FLASK_DEBUG=1

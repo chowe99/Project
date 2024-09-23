@@ -1,17 +1,21 @@
-CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL
 );
 
+-- Insert sample data
 INSERT INTO users (name, email) VALUES ('Marty McFly', 'marty@mcfly.com');
 INSERT INTO users (name, email) VALUES ('Doc Brown', 'doc@brown.com');
 INSERT INTO users (name, email) VALUES ('Biff Tannen', 'biff@tannen.com');
 
-CREATE TABLE secrets (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    flag VARCHAR(255) NOT NULL
+-- Create secrets table
+CREATE TABLE IF NOT EXISTS secrets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    flag TEXT NOT NULL
 );
 
+-- Insert the flag
 INSERT INTO secrets (flag) VALUES ('FLAG{GreatScott_1.21_Gigawatts}');
 

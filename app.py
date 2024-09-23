@@ -1,18 +1,14 @@
 from flask import Flask, request, render_template, g
-import mysql.connector
-import os
+import sqlite3
 
 app = Flask(__name__)
 
-# MySQL database configuration from environment variables
+# SQLite database configuration
+DATABASE = 'database.db'
+
 def get_db():
     if not hasattr(g, 'db'):
-        g.db = mysql.connector.connect(
-            host=os.getenv('MYSQL_HOST', 'db'),
-            user=os.getenv('MYSQL_USER', 'root'),
-            password=os.getenv('MYSQL_PASSWORD', 'my-secret-pw'),
-            database=os.getenv('MYSQL_DATABASE', 'hack_to_the_future')
-        )
+        g.db = sqlite3.connect(DATABASE)
     return g.db
 
 @app.teardown_appcontext
@@ -27,7 +23,7 @@ def user():
     if request.method == 'POST':
         user_id = request.form['id']
         cur = get_db().cursor()
-        query = f"SELECT * FROM users WHERE id = {user_id} OR IF(ASCII(SUBSTRING((SELECT flag FROM secrets LIMIT 1), 1, 1)) = 70, SLEEP(5), 0)"
+        query = f"SELECT * FROM users WHERE id = '{user_id}'"
         cur.execute(query)
         user_data = cur.fetchall()
         return render_template('user.html', user_data=user_data)
@@ -43,3 +39,4 @@ def comment():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
+
