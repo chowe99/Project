@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Database files
+*.db
+*.sqlite3
+
+# Flask environment variables
+.env
+instance/
+
+# Logs
+*.log
+*.log.*
+
+# Python virtual environment
+venv/
+ENV/
+
+# pipenv environment
+Pipfile
+Pipfile.lock
+
+# macOS
+.DS_Store
+
+# Backup files
+*.bak
+*.swp
+*.swo
+
+# Editor/project-specific files
+.idea/
+.vscode/
+*.code-workspace
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Distribution files
+dist/
+build/
+

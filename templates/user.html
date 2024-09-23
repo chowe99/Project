@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Lookup</title>
+</head>
+<body>
+    <h1>User Lookup</h1>
+    <form method="POST">
+        <label for="id">User ID:</label>
+        <input type="text" id="id" name="id">
+        <button type="submit">Submit</button>
+    </form>
+    
+    {% if user_data %}
+        <h2>User Data:</h2>
+        <ul>
+            {% for row in user_data %}
+                <li>ID: {{ row[0] }}, Name: {{ row[1] }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
+
