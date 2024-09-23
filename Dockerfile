@@ -10,6 +10,10 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Initialize the SQLite database by running the SQL script
+RUN apt-get update && apt-get install -y sqlite3
+RUN sqlite3 database.db < database.sql
+
 # Make port 5000 available to the outside world
 EXPOSE 5000
 
