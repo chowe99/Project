@@ -1,14 +1,15 @@
 services:
   web:
     build: .
-    command: ./entrypoint.sh  # We'll handle starting both servers here
+    command: ./entrypoint.sh
     ports:
       - "5000:5000"
     volumes:
       - .:/app
+      - /usr/bin/google-chrome:/usr/bin/google-chrome  # Mount Chrome from the host
+      - /usr/local/bin/chromedriver:/usr/local/bin/chromedriver  # Mount ChromeDriver from the host
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
     extra_hosts:
-      - "bot.com:127.0.0.1"  # This maps bot.com to localhost
-
+      - "bot.com:127.0.0.1"
