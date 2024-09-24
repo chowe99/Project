@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communicate with Doc</title>
+</head>
+<body>
+    <h1>Communicate with Doc</h1>
+
+    <form action="/communicate" method="POST">
+        <label for="message">Your message to Doc:</label><br>
+        <input type="text" id="message" name="message" required><br>
+        <input type="submit" value="Send">
+    </form>
+
+    <h2>Your message:</h2>
+    <p>{{ marty_message }}</p>
+
+    <h2>Doc's reply:</h2>
+    <p>{{ doc_reply }}</p>
+</body>
+</html>
+

@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   web:
     build: .
-    command: flask run --host=0.0.0.0
+    command: ./entrypoint.sh  # We'll handle starting both servers here
     ports:
       - "5000:5000"
     volumes:
@@ -11,3 +9,6 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+    extra_hosts:
+      - "bot.com:127.0.0.1"  # This maps bot.com to localhost
+
