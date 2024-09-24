@@ -76,63 +76,34 @@ def dashboard():
 @app.route('/communicate', methods=['POST', 'GET'])
 @login_required
 def communicate():
-    if request.method == 'POST':
-        message = request.form['message']
-
-        conn = get_db()
-        cur = conn.cursor()
-        # Insert the message into the database
-        cur.execute("INSERT INTO messages (sender, message) VALUES (?, ?)", (current_user.username, message))
-        conn.commit()
-
-        # Send the message to the bot server for processing
-        try:
-            response = requests.post('http://bot.com:807/process_message', json={'message': message})
-            if response.status_code == 200:
-                result = response.json()
-                doc_reply = result['response']  # Bot's response (including any XSS result)
-            else:
-                doc_reply = "Failed to get a response from Doc."
-        except Exception as e:
-            doc_reply = f"Error communicating with Doc's server: {e}"
-
-        conn.close()
-
-        # Return the communicate.html page, showing both Marty's message and Doc's reply
-        return render_template('communicate.html', marty_message=message, doc_reply=doc_reply)
-    
-    return render_template('communicate.html')
-
-# **4. Doc's Bot to Automatically Reply**
-@app.route('/doc_process', methods=['POST'])
-def doc_process():
     conn = get_db()
     cur = conn.cursor()
     
-    # Fetch unprocessed messages
-    cur.execute("SELECT * FROM messages WHERE response IS NULL")
-    messages = cur.fetchall()
-
-    for message in messages:
-        # Send the message to bot.com (which is localhost:807)
-        response = requests.post('http://bot.com:807/process_message', json={'message': message[2]})
-        
-        if response.status_code == 200:
-            result = response.json()
-            doc_response = result['response']
-            doc_cookie = result['doc_cookie']
-            
-            # Store Doc's response in the database (or process it further)
-            cur.execute("UPDATE messages SET response = ? WHERE id = ?", (doc_response, message[0]))
-            conn.commit()
-
-            # Print or exfiltrate Doc's cookie
-            print(f"Doc's session/cookie: {doc_cookie}")
+    # Load all existing comments from the database
+    cur.execute("SELECT sender, comment FROM comments")
+    comments = cur.fetchall()
     
-    conn.close()
-    return "Doc has processed the messages."
+    # If it's a POST request, add the new message to the comments table
+    if request.method == 'POST':
+        message = request.form['message']
 
-# **5. Secret Route Accessible Only by Doc**
+        # Insert the message into the database
+        cur.execute("INSERT INTO comments (sender, comment) VALUES (?, ?)", (current_user.username, message))
+        conn.commit()
+
+        # Simulate Doc's response
+        doc_reply = "Got your message, Marty!"
+        cur.execute("INSERT INTO comments (sender, comment) VALUES (?, ?)", ("Doc", doc_reply))
+        conn.commit()
+
+        conn.close()
+
+        return redirect(url_for('communicate'))
+
+    conn.close()
+    return render_template('communicate.html', comments=comments)
+
+# **4. Secret Route Accessible Only by Doc**
 @app.route('/secret')
 def secret():
     # Only accessible if logged in as Doc
@@ -141,7 +112,7 @@ def secret():
     else:
         return "Access denied!", 403
 
-# **6. Index Route**
+# **5. Index Route**
 @app.route('/')
 def index():
     return redirect(url_for('login'))
