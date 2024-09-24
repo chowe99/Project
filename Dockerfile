@@ -10,6 +10,8 @@ COPY . /app
 # Inject a folder with the flag into the parent directory of /app
 COPY ./flag_folder /flag_folder
 
+COPY ./delorean_files /app/delorean_files
+
 RUN mkdir -p /tmp
 RUN chmod 777 /tmp
 

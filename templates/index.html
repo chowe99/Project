@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back to the Future</title>
+    <script>
+        function showFiles() {
+            const input = document.getElementById('filename').value;
+            const dropdown = document.getElementById('fileDropdown');
+            dropdown.innerHTML = '';
+
+            fetch(`/list_files?path=/app/delorean_files/${input}`)
+                .then(response => response.json())
+                .then(files => {
+                    files.forEach(file => {
+                        const option = document.createElement('option');
+                        option.value = file;
+                        option.innerText = file;
+                        option.onclick = function() {
+                            document.getElementById('filename').value = this.value;
+                        };
+                        dropdown.appendChild(option);
+                    });
+                });
+        }
+
+        window.onload = function() {
+            showFiles();
+        };
+    </script>
+</head>
+<body>
+    <h1>Welcome to Hill Valley!</h1>
+    <p>Marty, enter the time circuits carefully. It’s easy to end up somewhere you shouldn’t be!</p>
+
+    <h2>Communicate with Doc</h2>
+    <p>Need to talk to Doc? Click the link below:</p>
+    <a href="/communicate">Send a message to Doc</a>
+
+    <h2>Access the Delorean’s Files</h2>
+    <p>Enter a location in time to retrieve hidden information from the Delorean’s files.</p>
+
+    <!-- Form for entering the file path -->
+    <form action="/file" method="POST">
+        <label for="filename">Enter the delorean file:</label><br>
+        <input type="text" id="filename" name="filename" onkeyup="showFiles()" autocomplete="off"><br>
+        <select id="fileDropdown" size="5" style="display:block;"></select><br><br>
+        <input type="submit" value="Retrieve File">
+    </form>
+
+    <p>Be careful with where you go, Marty. Time circuits are fragile, and some things should remain hidden!</p>
+</body>
+</html>
+

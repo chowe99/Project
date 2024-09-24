@@ -20,6 +20,7 @@ def process_message():
 
     # Visit the /communicate page where Marty left the message
     driver.get("http://localhost:5000/communicate")
+    print("[BOT] Visited /communicate page")
 
     # Simulate Doc's session by adding the correct session cookie
     driver.add_cookie({
@@ -27,16 +28,21 @@ def process_message():
         'value': 'doc_session=True',  # Ensure that Doc's session is active
         'path': '/'
     })
+    print("[BOT] Doc's session cookie added")
 
     # Revisit /communicate with Doc's session active
     driver.get("http://localhost:5000/communicate")
-    
+    print("[BOT] Revisiting /communicate page with Doc's session")
+
     # Extract the page content or any cookie information (this will simulate an XSS payload)
     try:
         page_source = driver.page_source
+        print("[BOT] Page Source: ", page_source[:500])  # Print first 500 characters of the page source for brevity
         cookies = driver.execute_script("return document.cookie;")
+        print("[BOT] Cookies: ", cookies)
     except Exception as e:
         page_source = f"Error executing script: {e}"
+        print("[BOT] Error: ", e)
     
     driver.quit()
 
