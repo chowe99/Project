@@ -1,57 +1,44 @@
-from flask import Flask
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-import time
 
-app = Flask(__name__)
+# The cookie for Doc's session (retrieved from Doc's actual session or manually set)
+DOC_SESSION_COOKIE = {
+    'name': 'session',  # The name of the session cookie, e.g., "session" or "session_id"
+    'value': 'doc_session_cookie_value',  # The actual session cookie value
+    'domain': 'localhost',  # Domain where the cookie is valid
+    'path': '/',  # Path for which the cookie is valid
+    'httpOnly': True,  # If applicable
+    'secure': False,  # Set to True if using HTTPS
+}
 
-@app.route('/process_message', methods=['POST'])
-def process_message():
-    # Set up Chrome options for headless browsing
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+# Set up Chrome options for headless browsing
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
 
-    # Start the ChromeDriver
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+# Start the ChromeDriver
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    # Visit the /communicate page where Marty left the message
-    driver.get("http://localhost:5000/communicate")
-    print("[BOT] Visited /communicate page")
+# Navigate to the site so that the cookie is accepted
+driver.get("http://localhost:5000/")
 
-    # Simulate Doc's session by adding the correct session cookie
-    driver.add_cookie({
-        'name': 'session', 
-        'value': 'doc_session=True',  # Ensure that Doc's session is active
-        'path': '/'
-    })
-    print("[BOT] Doc's session cookie added")
+# Add Doc's session cookie
+driver.add_cookie(DOC_SESSION_COOKIE)
 
-    # Revisit /communicate with Doc's session active
-    driver.get("http://localhost:5000/communicate")
-    print("[BOT] Revisiting /communicate page with Doc's session")
+# Revisit the page where Doc's session is required, e.g., /secret
+driver.get("http://localhost:5000/secret")
 
-    # Extract the page content or any cookie information (this will simulate an XSS payload)
-    try:
-        page_source = driver.page_source
-        print("[BOT] Page Source: ", page_source[:500])  # Print first 500 characters of the page source for brevity
-        cookies = driver.execute_script("return document.cookie;")
-        print("[BOT] Cookies: ", cookies)
-    except Exception as e:
-        page_source = f"Error executing script: {e}"
-        print("[BOT] Error: ", e)
-    
-    driver.quit()
+# Extract the page content or any cookie information (this will simulate Doc's session access)
+try:
+    page_source = driver.page_source
+    print("[BOT] Page Source: ", page_source[:500])  # Print first 500 characters for brevity
+    cookies = driver.get_cookies()  # Optionally retrieve all cookies
+    print("[BOT] Cookies: ", cookies)
+except Exception as e:
+    print("[BOT] Error: ", e)
 
-    # Return the page content and Doc's cookie to simulate the XSS exploit
-    return {
-        'page_content': page_source,
-        'doc_cookie': cookies
-    }, 200
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8070)
+driver.quit()
 
