@@ -105,16 +105,16 @@ def list_files():
 def communicate():
     conn = get_db()
     cur = conn.cursor()
-    
+
     # Load all existing messages from the database
     cur.execute("SELECT sender, message, response FROM messages")
     messages = cur.fetchall()
-    
+
     # If it's a POST request, add the new message to the messages table
     if request.method == 'POST':
         message = request.form['message']
 
-        # Insert the message into the database
+        # Insert the message into the database (no filtering to allow XSS)
         cur.execute("INSERT INTO messages (sender, message) VALUES (?, ?)", (current_user.username, message))
         conn.commit()
 

@@ -1,0 +1,6 @@
+services:
+  web:
+    volumes:
+      - /home/ed/.local/lib/python3.8/site-packages:/usr/local/lib/python3.8/site-packages
+      - /usr/bin/chromedriver:/usr/bin/chromedriver
+      - /usr/bin/google-chrome:/usr/bin/google-chrome

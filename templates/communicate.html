@@ -14,11 +14,13 @@
         <input type="submit" value="Send">
     </form>
 
-    <h2>Your message:</h2>
-    <p>{{ marty_message }}</p>
-
-    <h2>Doc's reply:</h2>
-    <p>{{ doc_reply }}</p>
+    <h2>Messages</h2>
+    <ul>
+        {% for message in messages %}
+            <li><strong>{{ message[0] }}:</strong> {{ message[1] | safe }}</li>
+            <li><strong>Doc's Reply:</strong> {{ message[2] }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
 
