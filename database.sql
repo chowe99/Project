@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
 INSERT OR IGNORE INTO users (username, password) VALUES ('marty', 'password123');
 
 -- Insert Doc's login credentials
--- INSERT OR IGNORE INTO users (username, password) VALUES ('doc', 'greatscott!');
+INSERT OR IGNORE INTO users (username, password) VALUES ('doc', 'greatscott!');
 
 -- Create the messages table
 CREATE TABLE IF NOT EXISTS messages (

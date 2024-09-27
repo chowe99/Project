@@ -15,10 +15,10 @@ login_manager.login_view = 'login'  # Redirect to login page if unauthorized
 DATABASE = '/tmp/database.db'
 
 # Directory containing Back to the Future-themed files
-DELOREAN_FOLDER = '/app/delorean_files'
+DELOREAN_FOLDER = '/app/delorean_files/'
 
 # Manually set Doc's cookie value
-DOC_SESSION_COOKIE = 'docs_cookie_value'
+DOC_SESSION_COOKIE = '.eJwljkEKAyEMRe_iuotEY4xzmSHRSAdKB8Z2VXr3Ct29D-_D-4R9XD7vYXtdb7-F_ehhC6IVC7SexaGqcqWkFJU8cmup6RDtFIdmMViuWEWmjNlKJCcgMa_JFRxZgawltloXMubs4gUHaVxnQdDYlUpjSt4xCZBasrBC3tOvfw2u2c-2T5_zOJ9hG_qY_v0BpAY2Pg.ZvVbug.YJhGO1aBZtL_kubNl_Ixkrg8msw'
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
@@ -124,7 +124,7 @@ def file():
 
     # Vulnerable to directory traversal - allows user input for file paths
     try:
-        with open(filename, 'r') as file:
+        with open(f"/app/delorean_files/{filename}", 'r') as file:
             content = file.read()
             return f"Contents of {filename.split('/')[-1]}:<br><pre>{content}</pre>"
     except FileNotFoundError:
@@ -180,22 +180,15 @@ def communicate():
 def secret():
     # Check if the correct 'doc_session' cookie is present
     if request.cookies.get('doc_session') == DOC_SESSION_COOKIE:
-        return "This is Doc's secret page with confidential information!"
+        return "This is Doc's secret page with confidential information!\nFLAG5"
     else:
-        return "Access denied!", 403
+        return "That's not Doc's cookie!", 403
 
 # **6. Index Route**
 @app.route('/')
 @login_required
 def index():
     return render_template('index.html')
-
-# Test route to manually set Doc's cookie for testing
-@app.route('/set_doc_cookie')
-def set_doc_cookie():
-    resp = make_response("Doc's session cookie set!")
-    resp.set_cookie('doc_session', DOC_SESSION_COOKIE)
-    return resp
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
